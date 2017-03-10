@@ -1,0 +1,4 @@
+[submodule "spacemacs/.emacs.d/private/groovy"]
+	path = spacemacs/.emacs.d/private/groovy
+	url = https://github.com/dcluna/spacemacs-groovy.git
+	branch = master
