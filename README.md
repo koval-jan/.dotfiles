@@ -4,7 +4,7 @@
 Manage .dotfiles with stow
 
 ```sh
-cd && git clone origin https://github.com/koval-jan/.dotfiles.git && cd .dotfiles
-stow vim
-stow spacemacs
+git clone https://github.com/koval-jan/.dotfiles.git && cd .dotfiles
+stow -t ~/ vim
+stow -t ~/ spacemacs
 ```
