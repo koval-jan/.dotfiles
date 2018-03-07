@@ -12,7 +12,7 @@
 	st = status -s
 	cl = clone
 	cm = commit
-	cmm = "!f() { git commit -m "$1"; }; f"
+	cmm = "!f() { git commit -m \"$1\"; }; f"
 	co = checkout
 	br = branch
 	su = submodule update
