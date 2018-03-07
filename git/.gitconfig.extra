@@ -7,10 +7,12 @@
 
 [alias]
 	faq = "!git config -l | grep alias | cut -c 7-"
+	aa = add -A
 	cp = cherry-pick
 	st = status -s
 	cl = clone
 	cm = commit
+	cmm = "!f() { git commit -m "$1"; }; f"
 	co = checkout
 	br = branch
 	su = submodule update
