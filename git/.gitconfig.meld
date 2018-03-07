@@ -1,0 +1,27 @@
+#
+# meld as diff and merge tool
+#
+
+[merge]
+	keepBackup = false;
+	tool = meld
+
+[mergetool]
+	prompt = false
+	keepBackup = false
+
+[mergetool "meld"]
+	cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+	keepTemporaries = false
+	keepBackup = false
+
+[diff]
+	tool = meld
+
+[difftool]
+	prompt = false
+
+[difftool "meld"]
+	cmd = meld "$LOCAL" "$REMOTE"
+	keepTemporaries = false
+	keepBackup = false
