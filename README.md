@@ -21,7 +21,7 @@ git config --global --add include.path "$HOME/.gitconfig.extra"
 remove
 
 ```sh
-git config --global --unset-all include.path ".*\.gitconfig.meld"
+git config --global --unset-all include.path ".*\.gitconfig.extra"
 ```
 
 ### git with p4v
