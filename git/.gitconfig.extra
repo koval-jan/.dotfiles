@@ -24,6 +24,7 @@
 	rh = reset --hard
 	rh1 = reset HEAD^ --hard
 	rh2 = reset HEAD^^ --hard
+	rhc = !git reset --hard && git clean -ffdx && git submodule foreach --recursive git reset --hard && git submodule foreach --recursive git clean -ffdx
 
 	sl = stash list
 	sa = stash apply
