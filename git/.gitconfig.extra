@@ -33,9 +33,9 @@
 	ls = log --pretty=format:\"%C(yellow)%h\\ %m %ad%C(yellow bold)%d\\ %Creset%s%C(cyan)\\ [%an] %Creset\" --decorate --date=relative
 	ll = log --pretty=format:\"%C(yellow)%h\\ %m %ad%C(yellow bold)%d\\ %Creset%s%C(cyan)\\ [%an] %Creset\" --decorate --numstat --date=relative
 	lt = describe --tags --abbrev=0
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 
 	dr  = "!f() { git diff \"$1\"^..\"$1\"; }; f"
 	lc  = "!f() { git ll \"$1\"^..\"$1\"; }; f"
 	diffr  = "!f() { git diff \"$1\"^..\"$1\"; }; f"
-
-
