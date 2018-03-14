@@ -14,6 +14,7 @@
 	cm = commit
 	cmm = "!f() { git commit -m \"$1\"; }; f"
 	co = checkout
+	cor = "!f() { git checkout -f \"origin/$1\" -B \"$1\" }; f"
 	br = branch
 	su = submodule update
 	up = !git fetch && git rebase --autostash FETCH_HEAD
