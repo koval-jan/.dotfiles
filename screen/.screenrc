@@ -1,3 +1,34 @@
+# ctrl a c              -> create new window
+# ctrl a A              -> set window name
+# ctrl a Q              -> kill terminal
+# ctrl a w              -> show all window
+# ctrl a 1|2|3|…        -> switch to window n
+# ctrl a "              -> choose window
+# ctrl a ctrl a         -> switch last window
+# ctrl a d              -> detach window
+# ctrl a ?              -> help
+# ctrl a [              -> start copy, move cursor to the copy location, press ENTER,
+#                          select the chars, press ENTER to copy the selected characters
+#                          to the buffer
+# ctrl a ]              -> paste from buffer
+# ctrl a {              -> history
+
+# ctrl a S              -> split screen horizontally
+# ctrl a |              -> split screen vertically
+# ctrl a TAB            -> switch between split screens
+
+# ctrl a Q              -> Kill all regions but the current one.
+# ctrl a X              -> remove active window from split screen
+# ctrl a O              -> logout active window (disable output)
+# ctrl a I              -> login active window (enable output)
+
+# screen –DR            -> list of detached screen
+# screen –r PID         -> attach detached screen session
+# screen –dmS MySession -> start a detached screen session
+# screen –r MySession   -> attach screen session with name MySession
+
+
+
 # the following two lines give a two-line status, with the current window highlighted
 hardstatus alwayslastline
 hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%m/%d %{W}%C%A%{g}]'
@@ -19,8 +50,8 @@ mousetrack on
 # default windows
 screen -t Shell1  1 bash
 screen -t Shell2  2 bash
-screen -t Python  3 python
-screen -t Media   4 bash
+#screen -t Python  3 python
+#screen -t Media   4 bash
 select 0
 bind c screen 1 # window numbering starts at 1 not 0
 bind 0 select 10
@@ -76,6 +107,7 @@ bind -c rsz h eval "resize -h -5" "command -c rsz"
 bind -c rsz j eval "resize -v -5" "command -c rsz"
 bind -c rsz k eval "resize -v +5" "command -c rsz"
 bind -c rsz l eval "resize -h +5" "command -c rsz"
+bind -c rsz = eval "resize =" "command -c rsz"
 
 # quickly switch between regions using tab and arrows
 bind -c rsz \t    eval "focus"       "command -c rsz" # Tab
