@@ -8,6 +8,8 @@ git clone https://github.com/koval-jan/.dotfiles.git && cd .dotfiles && git subm
 stow -t ~/ vim
 stow -t ~/ spacemacs
 stow -t ~/ git
+stow -t ~/ screen
+stow -t ~/ tmux
 ```
 
 ## git
