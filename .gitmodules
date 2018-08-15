@@ -2,3 +2,6 @@
 	path = spacemacs/.emacs.d/private/groovy
 	url = https://github.com/dcluna/spacemacs-groovy.git
 	branch = master
+[submodule "spacemacs/.emacs.d/private/jinja2-mode"]
+	path = spacemacs/.emacs.d/private/jinja2-mode
+	url = https://github.com/paradoxxxzero/jinja2-mode.git
