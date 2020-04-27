@@ -39,7 +39,8 @@
 	lt = describe --tags --abbrev=0
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    lc = "!f() { git symbolic-ref HEAD && git log --stat-width=140 --stat-name-width=120 --no-merges --stat -1 ${1:-HEAD}; }; f"
 
 	dr  = "!f() { git diff \"$1\"^..\"$1\"; }; f"
-	lc  = "!f() { git ll \"$1\"^..\"$1\"; }; f"
+	#lc  = "!f() { git ll \"$1\"^..\"$1\"; }; f"
 	diffr  = "!f() { git diff \"$1\"^..\"$1\"; }; f"
