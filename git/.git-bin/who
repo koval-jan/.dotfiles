@@ -1,0 +1,87 @@
+#!/bin/bash
+
+usage(){
+    cat <<EOF
+
+usage : who [--help] FILE...
+
+      --help     -h   this help
+      --commits  -c   number of commits
+      --lines    -l   number of lines of code
+      --authotrs -a   last 10 authors
+
+Displays authors of given file by commits, lines of code and last 10 authors
+Almost better then 'git blame'
+EOF
+}
+
+mode=lines
+while (( $# > 0 )); do
+    case "$1" in
+        -h | --help  ) usage; exit;;
+        -c | --commits ) mode=commits; shift;;
+        -l | --lines ) mode=lines; shift;;
+        -a | --authotrs ) mode=authors; shift;;
+        *             ) break;;
+    esac
+done
+
+if [[ -z $1 ]]; then
+    >&2 echo "Provide filename"
+    usage
+    exit 1
+fi
+
+
+function git_who(){
+    local file="$1"
+    # -M80% : means 80% similarity index. To not report authors for less similar resource files.
+    cat << EOF
+file: $file
+EOF
+
+    case "$mode" in
+        commits)
+            cat << EOF
+number of commits:
+
+$(git log --follow -M80% --format="%aE" -- "$file" | sort | uniq -ic | sort -nr)
+
+EOF
+            ;;
+        lines )
+            cat << EOF
+number of lines of code:
+
+$(git blame -w --line-porcelain -- "$file" | sed -n "s/^author-mail //p" | sed "s/<//;s/>//" | sort | uniq -ic | sort -nr)
+
+EOF
+            ;;
+        authors )
+            cat << EOF
+last 10 authors:
+
+$(git log --follow -M80% --format="%an, %ar: %h" --no-merges -10  -- "$file")
+
+EOF
+            ;;
+        *    ) ;;
+    esac
+
+}
+
+function who() {
+    for f in "$@";
+    do
+        if [[ -d $f ]]; then
+            for fd in "$f"/*; do
+                who "$fd"
+            done
+        else
+            git_who "$f"
+        fi
+
+    done
+}
+
+who "$@"
