@@ -10,17 +10,21 @@ stow -t ~/ spacemacs
 stow -t ~/ git
 stow -t ~/ screen
 stow -t ~/ tmux
+stow -t ~/ ssh
+stow -t ~/ bash
 ```
 
 ## git
 
 To include extra git configuration globally run: 
 
+enabling:
+
 ```sh
 git config --global --add include.path "$HOME/.gitconfig.extra"
 ```
 
-remove
+disabling:
 
 ```sh
 git config --global --unset-all include.path ".*\.gitconfig.extra"
@@ -30,11 +34,13 @@ git config --global --unset-all include.path ".*\.gitconfig.extra"
 
 to use p4v as diff and merge tool
 
+enabling:
+
 ```sh
 git config --global --add include.path "$HOME/.gitconfig.p4v"
 ```
 
-remove
+disabling:
 
 ```sh
 git config --global --unset-all include.path ".*\.gitconfig.p4v"
@@ -44,13 +50,36 @@ git config --global --unset-all include.path ".*\.gitconfig.p4v"
 
 to use meld as diff and merge tool
 
+enabling:
 ```sh
 git config --global --add include.path "$HOME/.gitconfig.meld"
 ```
 
-remove
+disabling:
 
 ```sh
 git config --global --unset-all include.path ".*\.gitconfig.meld"
 ```
 
+## bash
+
+bashrc extension scripts in ~/.bashrc.d/
+
+enabling:
+
+```sh
+# add to ~/.bashrc
+
+# extension from dotfiles loads ~/.bashrc.d/*.bashrc files
+source ~/.bashrc.extra
+```
+
+
+disabling:
+
+```sh
+# remove from ~/.bashrc
+
+# extension from dotfiles loads ~/.bashrc.d/*.bashrc files
+source ~/.bashrc.extra
+```
