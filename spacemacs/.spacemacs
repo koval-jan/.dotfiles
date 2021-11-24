@@ -39,7 +39,7 @@ This function should only modify configuration layer settings."
      javascript
      windows-scripts
      python
-     org-gratex-md
+     ;;org-gratex-md
      groovy
 
      nixos
@@ -57,7 +57,8 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      markdown
-     org
+     (org :variables
+          org-enable-org-journal-support t)
      shell
      (shell :variables
             shell-default-height 30
@@ -70,6 +71,7 @@ This function should only modify configuration layer settings."
      go
      neotree
      plantuml
+     kubernetes
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -562,6 +564,11 @@ before packages are loaded."
   (customize-set-variable 'helm-occur-use-ioccur-style-keys t)
   (customize-set-variable 'helm-grep-use-ioccur-style-keys t)
 
+  ;; org journal
+  (setq org-journal-dir "~/git/timetracker/")
+  (setq org-journal-date-prefix "#+TITLE: ")
+  (setq org-journal-date-format "%A, %B %d %Y")
+
   (defun copy-to-clipboard ()
 
     "Copies selection to x-clipboard."
@@ -637,7 +644,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(sqlup-mode sql-indent yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy)))
+   '(tern kubernetes-tramp kubernetes-evil kubernetes magit-popup yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
