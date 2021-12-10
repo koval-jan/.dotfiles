@@ -564,6 +564,8 @@ before packages are loaded."
   (customize-set-variable 'helm-occur-use-ioccur-style-keys t)
   (customize-set-variable 'helm-grep-use-ioccur-style-keys t)
 
+  (setq powerline-default-separator 'utf-8)
+
   ;; org journal
   (setq org-journal-dir "~/git/timetracker/")
   (setq org-journal-date-prefix "#+TITLE: ")
