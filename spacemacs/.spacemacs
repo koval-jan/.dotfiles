@@ -567,6 +567,9 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+
+  ;; TLS
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 )
 
 
@@ -593,9 +596,6 @@ before packages are loaded."
   (customize-set-variable 'helm-grep-use-ioccur-style-keys t)
 
   (setq powerline-default-separator 'utf-8)
-
-  ;; TLS
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
   ;; org journal
   (setq org-journal-dir "~/git/timetracker/")
