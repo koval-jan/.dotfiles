@@ -568,6 +568,9 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
+  (require 'gnutls)
+  (add-to-list 'gnutls-trustfiles "/etc/ssl/certs/ca-certificates.crt")
+
   ;; TLS
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 )
@@ -588,6 +591,9 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (global-company-mode t)
+
+  ;; TLS
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
   (customize-set-variable 'helm-ff-lynx-style-map t)
   (customize-set-variable 'helm-imenu-lynx-style-map t)
@@ -677,13 +683,14 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy)))
+   '(tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy))
+ '(warning-suppress-types '((spacemacs))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
 )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
