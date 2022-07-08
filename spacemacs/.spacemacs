@@ -29,10 +29,11 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(sql
-     systemd
+   '(themes-megapack
+     sql
+     ;;systemd
      clojure
-     ansible
+     ;;ansible
      vimscript
      csv
      ruby
@@ -42,7 +43,7 @@ This function should only modify configuration layer settings."
      ;;org-gratex-md
      groovy
 
-     nixos
+     ;;nixos
      docker
      html
      yaml
@@ -54,7 +55,7 @@ This function should only modify configuration layer settings."
      helm
      auto-completion
      better-defaults
-     emacs-lisp
+     ;;emacs-lisp
      git
      markdown
      (org :variables
@@ -104,6 +105,9 @@ This function should only modify configuration layer settings."
 This function is called at the very beginning of Spacemacs startup,
 before layer configuration.
 It should only modify the values of Spacemacs settings."
+  ;; TLS
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
@@ -568,11 +572,12 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
-  (require 'gnutls)
-  (add-to-list 'gnutls-trustfiles "/etc/ssl/certs/ca-certificates.crt")
+  ;; set themes
+  (setq-default dotspacemacs-themes '(gruvbox-dark-hard
+                                      doom-monokai-pro
+                                      doom-one
+                                      doom-zenburn))
 
-  ;; TLS
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 )
 
 
