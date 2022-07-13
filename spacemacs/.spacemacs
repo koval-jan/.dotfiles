@@ -29,7 +29,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(themes-megapack
+   '(lua
+     themes-megapack
      sql
      ;;systemd
      clojure
@@ -685,13 +686,13 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy))
+   '(company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy))
  '(warning-suppress-types '((use-package) (use-package) (use-package) (spacemacs))))
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:background nil))))
  '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
 )
