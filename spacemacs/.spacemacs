@@ -599,6 +599,13 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;; Prevent using UI dialogs for prompts
+  (setq use-dialog-box nil)
+
+  ;; Disable spacemacs buffer warnings
+  (setq spacemacs-buffer--warnings nil)
+
   (global-company-mode t)
 
   (customize-set-variable 'helm-ff-lynx-style-map t)
