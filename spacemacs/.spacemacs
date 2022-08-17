@@ -34,7 +34,7 @@ This function should only modify configuration layer settings."
      sql
      ;;systemd
      clojure
-     ;;ansible
+     ansible
      vimscript
      csv
      ruby
@@ -42,7 +42,9 @@ This function should only modify configuration layer settings."
      windows-scripts
      python
      ;;org-gratex-md
-     groovy
+     (groovy :variables
+             groovy-backend 'lsp
+             groovy-lsp-jar-path "~/.lsp/groovy/groovy-language-server-all.jar")
 
      ;;nixos
      docker
@@ -574,7 +576,8 @@ It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
   ;; set themes
-  (setq-default dotspacemacs-themes '(doom-monokai-pro
+  (setq-default dotspacemacs-themes '(doom-spacegrey
+                                      doom-monokai-pro
                                       material
                                       zenburn
                                       ujelly
