@@ -43,8 +43,10 @@ This function should only modify configuration layer settings."
      python
      ;;org-gratex-md
      (groovy :variables
-             groovy-backend 'lsp
-             groovy-lsp-jar-path "~/.lsp/groovy/groovy-language-server-all.jar")
+             groovy-backend 'company-groovy
+             ;;groovy-backend 'lsp
+             ;;groovy-lsp-jar-path "~/.lsp/groovy/groovy-language-server-all.jar"
+             )
 
      ;;nixos
      docker
