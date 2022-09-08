@@ -578,14 +578,14 @@ It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
   ;; set themes
-  (setq-default dotspacemacs-themes '(doom-spacegrey
-                                      doom-monokai-pro
-                                      material
-                                      zenburn
-                                      ujelly
-                                      gruvbox-dark-hard
-                                      doom-one
-                                      doom-zenburn))
+  ;; (setq-default dotspacemacs-themes '(doom-spacegrey
+  ;;                                     doom-monokai-pro
+  ;;                                     material
+  ;;                                     zenburn
+  ;;                                     ujelly
+  ;;                                     gruvbox-dark-hard
+  ;;                                     doom-one
+  ;;                                     doom-zenburn))
 
 )
 
