@@ -7,6 +7,10 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
+" Avoid side-effects when nocompatible has already been set.
+if &compatible
+  set nocompatible
+endif
 " set list
 " set listchars=tab:>-,trail:~
 " set number

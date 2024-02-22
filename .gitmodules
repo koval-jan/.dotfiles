@@ -1,7 +1,4 @@
-[submodule "spacemacs/.emacs.d/private/groovy"]
-	path = spacemacs/.emacs.d/private/groovy
-	url = https://github.com/dcluna/spacemacs-groovy.git
+[submodule "bash/.local/share/dotfiles/kube-ps1"]
+	path = bash/.local/share/dotfiles/kube-ps1
+	url = https://github.com/jonmosco/kube-ps1.git
 	branch = master
-[submodule "spacemacs/.emacs.d/private/jinja2-mode"]
-	path = spacemacs/.emacs.d/private/jinja2-mode
-	url = https://github.com/paradoxxxzero/jinja2-mode.git

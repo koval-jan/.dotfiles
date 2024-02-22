@@ -25,12 +25,14 @@ This function should only modify configuration layer settings."
    dotspacemacs-ask-for-lazy-installation t
 
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(lua
-     themes-megapack
+   '(rust
+     systemd
+     lua
+     ;;themes-megapack
      sql
      ;;systemd
      clojure
@@ -78,6 +80,8 @@ This function should only modify configuration layer settings."
      neotree
      plantuml
      kubernetes
+     (terraform :variables
+                terraform-backend 'lsp)
      lsp
      (java :variables
            java-backend 'lsp)
@@ -387,12 +391,12 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   ;; (default t) (Emacs 24.4+ only)
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -624,6 +628,10 @@ before packages are loaded."
 
   (setq powerline-default-separator 'utf-8)
 
+  ;; terraform lsp
+  ;;(setq lsp-terraform-server '("terraform-ls" "serve"))
+  (setq lsp-disabled-clients '(tfls))
+
   ;; org journal
   (setq org-journal-dir "~/git/timetracker/")
   (setq org-journal-date-prefix "#+TITLE: ")
@@ -662,6 +670,9 @@ before packages are loaded."
 
   "https://github.com/syl20bnr/spacemacs/issues/7409"
   (setq-default persp-auto-save-opt 0)
+
+  (eval-after-load 'gnutls
+    '(add-to-list 'gnutls-trustfiles "/etc/ssl/certs/ca-certificates.crt"))
 
   (with-eval-after-load 'org
     (org-babel-do-load-languages
@@ -704,8 +715,25 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy))
- '(warning-suppress-types '((use-package) (use-package) (use-package) (spacemacs))))
+   '(systemd journalctl-mode company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy))
+ '(paradox-github-token t)
+ '(warning-suppress-log-types
+   '((emacsql)
+     (emacsql)
+     (emacsql)
+     (emacsql)
+     (use-package)
+     (use-package)
+     (use-package)
+     (spacemacs)))
+ '(warning-suppress-types
+   '((emacsql)
+     (emacsql)
+     (emacsql)
+     (use-package)
+     (use-package)
+     (use-package)
+     (spacemacs))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -1,0 +1,72 @@
+#!/bin/bash -e
+
+usage(){
+    cat <<EOF
+
+usage : add-common-remotes
+
+      --help     -h   this help
+      --dryrun   -d   dry run
+
+Add common remotes which are defined in ~/.projects/projects.yaml
+EOF
+}
+
+
+if ! [[ -f $HOME/.projects/projects.yaml ]]; then
+    echo "No projects configuration founde at ~/.projects/projects.yaml"
+fi
+
+readarray -t projects < <(yq e -o j -I 0 '.[]' "$HOME/.projects/projects.yaml")
+
+DRYRUN=false
+GIT_HOSTNAME=
+GIT_PATH=
+
+function origin-hostname(){
+    local origin result
+    origin=$(git remote get-url origin)
+    if [[ $origin =~ git@(.*):(.*) ]]; then
+        GIT_HOSTNAME="${BASH_REMATCH[1]}"
+        GIT_PATH="${BASH_REMATCH[2]}"
+        return 0
+    fi
+    return 1
+}
+
+if ! origin-hostname; then
+    exit
+fi
+
+
+while (( $# != 0 )); do
+    case "$1" in
+        --help | -h ) usage; exit;;
+        --dryrun | -d ) DRYRUN=true; shift;;
+        * ) break ;;
+    esac
+done
+
+
+for p in "${projects[@]}"; do
+    project="$(yq e '.| keys | .[0]' <<< "$p")"
+    git_hostname="$(yq e '.[] | .git' <<< "$p")"
+
+    path=$GIT_PATH
+    path="${path#*/}"
+
+    if [[ $DRYRUN == false ]]; then
+        echo "adding remote: ${project} git@${git_hostname}:${project}/${path}"
+        git remote set-url --delete --push origin "git@${git_hostname}:${project}/${path}" &>/dev/null || true
+        git remote set-url --add --push origin "git@${git_hostname}:${project}/${path}"
+        git remote add "$project" "git@${git_hostname}:${project}/${path}" &>/dev/null || true
+    else
+        cat <<EOF
+# remote for $project
+git remote set-url --delete --push origin "git@${git_hostname}:${project}/${path}"
+git remote set-url --add --push origin "git@${git_hostname}:${project}/${path}"
+git remote add "$project" "git@${git_hostname}:${project}/${path}"
+
+EOF
+    fi
+done

@@ -3,18 +3,18 @@
 #
 
 [credential]
-	helper = /usr/share/doc/git/contrib/credential/gnome-keyring/git-credential-gnome-keyring
+	helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
 
 [pull]
-    rebase = true
+	rebase = true
 
-[rebase] 
-    autoStash = true
+[rebase]
+	autoStash = true
 
 [alias]
 	faq = "!git config -l | grep alias | cut -c 7-"
 	aa = add -A
-    cc = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -10"
+	cc = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -10"
 	cp = cherry-pick
 	st = status -s
 	cl = clone
@@ -25,7 +25,7 @@
 	cors = "!f() { git stash save --include-untracked && git fetch origin && git checkout -f \"origin/$1\" -B \"$1\" && git stash pop; }; f"
 	br = branch
 	su = submodule update
-    sub = "!f() { $HOME/.git-bin/submodule-update-branch \"$@\"; }; f"
+	sub = "!f() { $HOME/.git-bin/submodule-update-branch \"$@\"; }; f"
 	up = !git fetch && git rebase --autostash FETCH_HEAD
 
 	r = reset
@@ -45,11 +45,13 @@
 	lt = describe --tags --abbrev=0
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    lc = "!f() { git symbolic-ref HEAD && git log --stat-width=140 --stat-name-width=120 --no-merges --stat -1 ${1:-HEAD}; }; f"
+	lc = "!f() { git symbolic-ref HEAD && git log --stat-width=140 --stat-name-width=120 --no-merges --stat -1 ${1:-HEAD}; }; f"
 
 	dr  = "!f() { git diff \"$1\"^..\"$1\"; }; f"
 	#lc  = "!f() { git ll \"$1\"^..\"$1\"; }; f"
 	diffr  = "!f() { git diff \"$1\"^..\"$1\"; }; f"
 
-    author-log = "!f() { $HOME/.git-bin/author-log \"$@\"; }; f"
-    who = "!f() { $HOME/.git-bin/who \"$@\"; }; f"
+	author-log = "!f() { $HOME/.git-bin/author-log \"$@\"; }; f"
+	who = "!f() { $HOME/.git-bin/who \"$@\"; }; f"
+
+	common-remotes = "!f() { $HOME/.git-bin/add-common-remotes \"$@\"; }; f"
