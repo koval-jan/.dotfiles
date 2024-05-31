@@ -29,7 +29,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
+   '(nginx
+     rust
      systemd
      lua
      ;;themes-megapack
@@ -50,7 +51,7 @@ This function should only modify configuration layer settings."
              ;;groovy-lsp-jar-path "~/.lsp/groovy/groovy-language-server-all.jar"
              )
 
-     ;;nixos
+     (nixos  :variables nix-backend 'lsp)
      docker
      html
      yaml
@@ -82,7 +83,8 @@ This function should only modify configuration layer settings."
      kubernetes
      (terraform :variables
                 terraform-backend 'lsp)
-     lsp
+     (lsp :variables
+          lsp-enable-on-type-formatting nil)
      (java :variables
            java-backend 'lsp)
      )
@@ -366,6 +368,10 @@ It should only modify the values of Spacemacs settings."
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
+   ;; It is also possible to use a posframe with the following cons cell
+   ;; `(posframe . position)' where position can be one of `center',
+   ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
+   ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'bottom
 
@@ -584,6 +590,9 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
+  ;; set Warnings level to error
+  (setq warning-minimum-level :emergency)
+
   ;; set themes
   ;; (setq-default dotspacemacs-themes '(doom-spacegrey
   ;;                                     doom-monokai-pro
@@ -611,6 +620,9 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;; turn off
+  (helm-descbinds-mode 0)
 
   ;; Prevent using UI dialogs for prompts
   (setq use-dialog-box nil)
@@ -714,6 +726,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
+ '(org-agenda-files '("/home/jkovalux/git/timetracker/20240301"))
  '(package-selected-packages
    '(systemd journalctl-mode company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy))
  '(paradox-github-token t)

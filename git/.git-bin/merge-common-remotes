@@ -1,0 +1,48 @@
+#!/bin/bash -e
+
+usage(){
+    cat <<EOF
+
+usage : merge-common-remotes
+
+      --help     -h   this help
+      --dryrun   -d   dry run
+
+Merge common remotes which are defined in ~/.projects/projects.yaml
+EOF
+}
+
+
+if ! [[ -f $HOME/.projects/projects.yaml ]]; then
+    echo "No projects configuration founde at ~/.projects/projects.yaml"
+fi
+
+readarray -t projects < <(yq e -o j -I 0 '.[]' "$HOME/.projects/projects.yaml")
+
+DRYRUN=false
+
+while (( $# != 0 )); do
+    case "$1" in
+        --help | -h ) usage; exit;;
+        --dryrun | -d ) DRYRUN=true; shift;;
+        * ) break ;;
+    esac
+done
+
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+
+ARGS=()
+for p in "${projects[@]}"; do
+    project="$(yq e '.| keys | .[0]' <<< "$p")"
+    ARGS+=("$project/$BRANCH")
+done
+
+if [[ $DRYRUN == false ]]; then
+    git fetch --all
+    git merge "${ARGS[@]}"
+else
+    cat <<EOF
+git fetch --all
+git merge ${ARGS[@]}
+EOF
+fi

@@ -18,8 +18,9 @@
 	cp = cherry-pick
 	st = status -s
 	cl = clone
-	cm = commit
+	cm = "!f() { git commit -m \"$*\"; }; f"
 	cmm = "!f() { git commit -m \"$*\"; }; f"
+	cma = "!f() { git commit --amend -m \"$*\"; }; f"
 	co = checkout
 	cor = "!f() { git fetch origin && git checkout -f \"origin/$1\" -B \"$1\"; }; f"
 	cors = "!f() { git stash save --include-untracked && git fetch origin && git checkout -f \"origin/$1\" -B \"$1\" && git stash pop; }; f"
@@ -54,4 +55,10 @@
 	author-log = "!f() { $HOME/.git-bin/author-log \"$@\"; }; f"
 	who = "!f() { $HOME/.git-bin/who \"$@\"; }; f"
 
+  trailer-add = "!f() { GIT_EDITOR=\"git interpret-trailers --trailer='$1: $2' --in-place\" git commit --amend; } && f"
+  trailer-changelog = "!f() { git trailer-add Changelog \"$*\"; } && f"
+
 	common-remotes = "!f() { $HOME/.git-bin/add-common-remotes \"$@\"; }; f"
+	merge-common-remotes = "!f() { $HOME/.git-bin/merge-common-remotes \"$@\"; }; f"
+
+  release = "!f() { $HOME/.git-bin/release \"$@\"; }; f"

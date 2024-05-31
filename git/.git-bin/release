@@ -1,0 +1,207 @@
+#!/bin/bash -e
+
+usage(){
+    cat <<EOF
+
+usage : release [minor major patch]
+
+      --help     -h   this help
+      --dryrun   -d   dry run
+
+Creates next version tag
+EOF
+}
+
+function semver::incr(){
+    local major=false
+    local minor=false
+    local patch=false
+
+    while (( $# !=  0 )); do
+        case "$1" in
+            --major | -M ) major=true; shift;;
+            --minor | -m ) minor=true; shift;;
+            --patch | -p ) patch=true; shift;;
+            * ) break;;
+        esac
+    done
+    local version=$1
+
+    a=( ${version//./ } )
+
+    if (( ${#a[@]} != 3 )); then
+        >&2 echo "Wrong semver format major.minor.patch ($version)"
+        exit 1
+    fi
+
+    if [[ $major == true ]]; then
+        ((a[0]+=1))
+        a[1]=0
+        a[2]=0
+    fi
+
+    if [[ $minor == true ]]; then
+        ((a[1]+=1))
+        a[2]=0
+    fi
+
+    if [[ $patch == true ]]; then
+        ((a[2]+=1))
+    fi
+
+    echo "${a[0]}.${a[1]}.${a[2]}"
+}
+
+function semver::compare(){
+    local left=${1:-0.0.0}
+    local right=${2:-0.0.0}
+    local v r result
+
+    l=( ${left//./ } )
+    r=( ${right//./ } )
+    if (( ${#l[@]} != 3 )); then
+        >&2 echo "Wrong semver format major.minor.patch ($l)"
+        exit 1
+    fi
+    if (( ${#r[@]} != 3 )); then
+        >&2 echo "Wrong semver format major.minor.patch ($r)"
+        exit 1
+    fi
+
+    result=$(( l[0] - r[0] ))
+    if (( result != 0 )); then
+        echo "$result"
+        return
+    fi
+
+    result=$(( l[1] - r[1] ))
+    if (( result != 0 )); then
+        echo "$result"
+        return
+    fi
+
+    result=$(( l[2] - r[2] ))
+    if (( result != 0 )); then
+        echo "$result"
+        return
+    fi
+
+    echo "0"
+}
+
+function semver::set(){
+    local major=false
+    local minor=false
+    local patch=false
+    local number
+
+    while (( $# !=  0 )); do
+        case "$1" in
+            --major | -M ) major=true; number=${2:?Missing number}; shift 2;;
+            --minor | -m ) minor=true; number=${2:?Missing number}; shift 2;;
+            --patch | -p ) patch=true; number=${2:?Missing number}; shift 2;;
+            * ) break;;
+        esac
+    done
+
+    if [[ -z ${number:-} ]]; then
+        >&2 echo "Expected argument (--major/--minor/--patch) with number"
+        exit 1
+    fi
+    if [[ -z ${1:-} ]]; then
+        >&2 echo "Expected semver version"
+        exit 1
+    fi
+    local version=${1}
+    local a
+
+    a=( ${version//./ } )
+
+    if (( ${#a[@]} != 3 )); then
+        >&2 echo "Wrong semver format major.minor.patch ($version)"
+        exit 1
+    fi
+
+    if [[ $major == true ]]; then
+        a[0]=$number
+    fi
+
+    if [[ $minor == true ]]; then
+        a[1]=$number
+    fi
+
+    if [[ $patch == true ]]; then
+        a[2]=$number
+    fi
+
+    echo "${a[0]}.${a[1]}.${a[2]}"
+}
+
+function semver::get(){
+    local position=0
+    local number
+
+    while (( $# !=  0 )); do
+        case "$1" in
+            --major | -M ) position=0; shift;;
+            --minor | -m ) position=1; shift;;
+            --patch | -p ) position=2; shift;;
+            * ) break;;
+        esac
+    done
+
+    if [[ -z ${1:-} ]]; then
+        >&2 echo "Expected semver version"
+        exit 1
+    fi
+    local version=${1}
+    local a
+
+    a=( ${version//./ } )
+
+    if (( ${#a[@]} != 3 )); then
+        >&2 echo "Wrong semver format major.minor.patch ($version)"
+        exit 1
+    fi
+
+    echo "${a[$position]}"
+}
+
+function latest(){
+    git describe --tags --abbrev=0 --first-paren --match='[0-9]*.[0-9]*.[0-9]*'
+}
+
+function next(){
+    local mode="${1}"
+    local latest_number
+    latest_number="$(latest)"
+    latest_number="${latest_number:-1.0.0}"
+    semver::incr "$mode" "$latest_number"
+}
+
+DRYRUN=false
+MODE="-p"
+while (( $# != 0 )); do
+    case "$1" in
+        --help | -h ) usage; exit;;
+        --dryrun | -d ) DRYRUN=true; shift;;
+        patch | pat | p ) MODE="-p"; shift;;
+        minor | min | mi ) MODE="-m"; shift;;
+        major | maj | ma ) MODE="-M"; shift;;
+        * ) break ;;
+    esac
+done
+
+if [[ $DRYRUN == true ]]; then
+    next "$MODE"
+else
+    #if ! git merge-base --is-ancestor HEAD "@{u}"; then
+    #    echo "Pushing changes to remote before tagging."
+    #    git push
+    #fi
+
+    nextversion="$(next "$MODE")"
+    echo "${nextversion}"
+    git tag -a "${nextversion}" -m "${nextversion}"
+    git push -q origin "refs/tags/${nextversion}"
+fi
