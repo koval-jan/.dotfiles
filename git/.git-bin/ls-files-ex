@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+
+mapfile -t symlinks < <(git ls-files -s | awk '/120000/{print $4}')
+for s in "${symlinks[@]}"; do
+    dest="$(readlink -f "$s")"
+    (
+        cd "$dest"
+        git ls-files | awk -v prefix="${s}/" '{print prefix $0}'
+    )
+done
+
+git ls-files

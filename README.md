@@ -4,7 +4,10 @@
 Manage .dotfiles with stow
 
 ```sh
-git clone https://github.com/koval-jan/.dotfiles.git && cd .dotfiles && git submodule update --init
+git clone https://github.com/koval-jan/.dotfiles.git
+cd .dotfiles
+git submodule update --init
+
 stow -t ~/ vim
 stow -t ~/ spacemacs
 stow -t ~/ git
@@ -16,7 +19,7 @@ stow -t ~/ bash
 
 ## git
 
-To include extra git configuration globally run: 
+To include extra git configuration globally run:
 
 enabling:
 
@@ -60,6 +63,22 @@ disabling:
 ```sh
 git config --global --unset-all include.path ".*\.gitconfig.meld"
 ```
+
+### git diff with difftastic
+
+to use difftastic as diff tool
+
+enabling:
+```sh
+git config --global --add include.path "$HOME/.gitconfig.difftastic"
+```
+
+disabling:
+
+```sh
+git config --global --unset-all include.path ".*\.gitconfig.difftastic"
+```
+
 
 ## bash
 

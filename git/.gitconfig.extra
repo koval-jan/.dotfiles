@@ -62,3 +62,4 @@
 	merge-common-remotes = "!f() { $HOME/.git-bin/merge-common-remotes \"$@\"; }; f"
 
   release = "!f() { $HOME/.git-bin/release \"$@\"; }; f"
+  ls-files-ex = "!f() { $HOME/.git-bin/ls-files-ex \"$@\"; }; f"
