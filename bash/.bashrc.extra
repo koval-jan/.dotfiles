@@ -1,5 +1,7 @@
 #!/bin/bash
 
-for file in "$HOME/.bashrc.d/"*.bashrc; do
-  source "$file"
+readarray -d '' files < <(find "$HOME/.bashrc.d/" -name '*.bashrc' -print0 | sort -z)
+
+for file in "${files[@]}"; do
+    source "$file"
 done

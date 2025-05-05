@@ -15,6 +15,7 @@ stow -t ~/ screen
 stow -t ~/ tmux
 stow -t ~/ ssh
 stow -t ~/ bash
+stow -t ~/ starship
 ```
 
 ## git

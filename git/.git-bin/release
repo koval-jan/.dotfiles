@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+readonly SNAPSHOT="-SNAPSHOT"
+
 usage(){
     cat <<EOF
 
