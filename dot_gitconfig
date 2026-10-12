@@ -1,0 +1,16 @@
+[user]
+	name = jkoval
+	email = jkoval@gratex.com
+[include]
+	path = /home/jkovalux/.gitconfig.extra
+	path = /home/jkovalux/.gitconfig.meld
+	path = /home/jkovalux/.gitconfig.difftastic
+	path = /home/jkovalux/.gitconfig.work
+[filesystem "IBM Corporation|1.8.0_161|/dev/nvme0n1p2"]
+	timestampResolution = 1001 microseconds
+	minRacyThreshold = 4575 microseconds
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
