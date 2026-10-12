@@ -1,7 +1,0 @@
-#
-# git config for work
-#
-
-[alias]
-  cmllm = "!f() { $HOME/git/cloud/git-commit-llm/git-commit-llm-interactive \"$@\"; }; f"
-  commit-llm = "!f() { $HOME/git/cloud/git-commit-llm/git-commit-llm \"$@\"; }; f"

@@ -1,4 +1,0 @@
-[submodule "bash/.local/share/dotfiles/kube-ps1"]
-	path = bash/.local/share/dotfiles/kube-ps1
-	url = https://github.com/jonmosco/kube-ps1.git
-	branch = master

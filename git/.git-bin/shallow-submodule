@@ -1,8 +1,0 @@
-#!/bin/bash -x
-set -eo pipefail
-
-git submodule init
-for i in $(git submodule | awk '{print $2}'); do
-    git submodule update --init --depth 1 -- "$i"
-done
-
