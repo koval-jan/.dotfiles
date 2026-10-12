@@ -1,0 +1,68 @@
+#!/bin/bash
+
+usage(){
+    cat <<EOF
+
+usage : author-log [--help] [-l|-c] author
+
+      --help   -h   this help
+      --latest -l   displays the latest modifications
+      --count  -c   show files and count of changed lines
+
+Lists all the files that were created or modified by the author and also show files and count of changed lines
+EOF
+}
+
+latest=false
+count=false
+while (( $# > 0 )); do
+    case "$1" in
+        -h | --help   ) usage; exit;;
+        -l | --latest ) latest=true; shift;;
+        -c | --count  ) count=true; shift;;
+        *             ) break;;
+    esac
+done
+
+if [[ -z $1 ]]; then
+    >&2 echo "Provide author name"
+    usage
+    exit 1
+fi
+
+author_name="$1"
+
+if [[ $count == true ]]; then
+    git log --numstat --oneline --author="$author_name" --pretty='%n' | \
+        awk '{ u[$3]=$1+$2; } END {
+                n=0;
+                for (k in u){
+                   if(u[k] > 0){
+                      print k"\t"u[k];
+                      n++;
+                   }
+                }
+                print "Number of files: "n;
+             }' | sort -n -k2
+else
+    echo "Added files:" >&2
+    added_files=$(git log --pretty="%n" --name-only --diff-filter=A --ignore-submodules --author="$author_name" | sort | uniq)
+    echo "$added_files"
+    echo "" >&2
+    echo "Modified files:" >&2
+    modified_files=$(git log --pretty="%n" --name-only --diff-filter=M --ignore-submodules --author="$author_name" | sort | uniq)
+    for f in $modified_files ; do
+        if [[ $added_files != *$f* ]]; then
+            echo "$f"
+        fi
+    done
+    if [[ $latest == true ]]; then
+        echo "" >&2
+        echo "Last changes:" >&2
+        for i in $modified_files ; do
+            if [[ $(git log -1 --pretty="%an" $i 2>/dev/null) = *$author_name* ]]; then
+                echo "$i"
+            fi
+        done
+    fi
+fi

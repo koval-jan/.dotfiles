@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+mapfile -t symlinks < <(git ls-files -s | awk '/120000/{print $4}')
+for s in "${symlinks[@]}"; do
+    dest="$(readlink -f "$s")"
+    (
+        if [[ -f $dest ]]; then
+            cd "$(dirname "$dest")"
+        else
+            cd "$dest"
+        fi
+
+        git ls-files | awk -v prefix="${s}/" '{print prefix $0}'
+    )
+done
+
+git ls-files

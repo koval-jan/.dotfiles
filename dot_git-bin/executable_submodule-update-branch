@@ -1,0 +1,45 @@
+#!/bin/bash -e
+
+usage(){
+    cat <<EOF
+
+usage : submodule-update-branch [--help] ...
+
+For each submodule that defines remote tracking branch command updates detached HEAD to local branch
+
+EOF
+}
+
+git_root_dir(){
+    r=$(git rev-parse --git-dir) && r=$(cd "$r" && pwd)/ && echo "${r%%/.git/*}"
+}
+
+isHEAD(){
+    git symbolic-ref -q HEAD >/dev/null
+}
+
+while (( $# > 0 )); do
+    case "$1" in
+        -h | --help ) usage; exit;;
+        *           ) break;;
+    esac
+done
+
+GIT_ROOT="$(git_root_dir)"
+
+cd "$GIT_ROOT"
+for s in $(git config -f .gitmodules --name-only --get-regexp 'submodule\..*\.path' | rev | cut -d '.' -f2- | rev); do
+    path="$(git config -f .gitmodules "$s.path")"
+    branch="$(git config -f .gitmodules "$s.branch" || true)"
+
+    if [[ -z $branch ]]; then
+        continue
+    fi
+
+    pushd "$GIT_ROOT/$path" >/dev/null
+    if ! isHEAD; then
+        echo "$path was detached now $branch"
+        git checkout -B "$branch"
+    fi
+    popd >/dev/null
+done

@@ -1,0 +1,112 @@
+#!/bin/bash -e
+
+#set -x
+usage(){
+    cat <<EOF
+
+usage : add-common-remotes
+
+      --help     -h   this help
+      --dryrun   -d   dry run
+      --remove   -r   remove remotes
+
+Add common remotes which are defined in ~/.projects/projects.yaml
+EOF
+}
+
+
+if ! [[ -f $HOME/.projects/projects.yaml ]]; then
+    echo "No projects configuration founde at ~/.projects/projects.yaml"
+fi
+
+readarray -t projects < <(yq e -o j -I 0 '.[]' "$HOME/.projects/projects.yaml")
+
+DRYRUN=false
+REMOVE=false
+GIT_HOSTNAME=
+GIT_PATH=
+
+function origin-hostname(){
+    local origin result
+    origin=$(git remote get-url origin)
+    if [[ $origin =~ git@(.*):(.*) ]]; then
+        GIT_HOSTNAME="${BASH_REMATCH[1]}"
+        GIT_PATH="${BASH_REMATCH[2]}"
+        return 0
+    fi
+    return 1
+}
+
+if ! origin-hostname; then
+    exit
+fi
+
+
+while (( $# != 0 )); do
+    case "$1" in
+        --help | -h ) usage; exit;;
+        --dryrun | -d ) DRYRUN=true; shift;;
+        --remove | -r ) REMOVE=true; shift;;
+        * ) break ;;
+    esac
+done
+
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+CLONE_URL="$(git config --get remote.origin.url)"
+if [[ $DRYRUN == false ]]; then
+    git remote remove origin || true
+    git remote remove from || true
+
+    if [[ -n $CLONE_URL ]]; then
+        git remote add origin "$CLONE_URL"
+        git remote set-url --add --push origin "$CLONE_URL"
+        git remote add from "$CLONE_URL"
+        git remote set-url --add --push from "$CLONE_URL"
+        git fetch from
+    fi
+
+    if [[ -n $BRANCH ]]; then
+        git fetch
+        git branch --set-upstream-to="origin/$BRANCH"
+    fi
+else
+    cat <<EOF
+# cleanup origin
+git remote remove origin
+EOF
+    if [[ -n $CLONE_URL ]]; then
+        cat <<EOF
+git remote add origin "$CLONE_URL"
+EOF
+    fi
+fi
+
+if [[ $REMOVE == true ]]; then
+    for o in $(git remote | grep -v '^origin$'); do
+        git remote remove "$o"
+    done
+    exit
+fi
+
+for p in "${projects[@]}"; do
+    project="$(yq e '.| keys | .[0]' <<< "$p")"
+    git_hostname="$(yq e '.[] | .git' <<< "$p")"
+
+    path=$GIT_PATH
+    path="${path#*/}"
+
+    if [[ $DRYRUN == false ]]; then
+        echo "adding remote: ${project} git@${git_hostname}:${project}/${path}"
+        git remote set-url --add --push origin "git@${git_hostname}:${project}/${path}"
+        git remote remove "$project" &>/dev/null || true
+        git remote add "$project" "git@${git_hostname}:${project}/${path}" &>/dev/null || true
+    else
+        cat <<EOF
+# remote for $project
+git remote set-url --add --push origin "git@${git_hostname}:${project}/${path}"
+git remote remove "$project" &>/dev/null || true
+git remote add "$project" "git@${git_hostname}:${project}/${path}" &>/dev/null || true
+
+EOF
+    fi
+done
