@@ -32,6 +32,7 @@
 	sub = "!f() { $HOME/.git-bin/submodule-update-branch \"$@\"; }; f"
 	up = !git fetch && git rebase --autostash FETCH_HEAD
 
+    res = restore --staged
 	r = reset
 	r1 = reset HEAD^
 	r2 = reset HEAD^^

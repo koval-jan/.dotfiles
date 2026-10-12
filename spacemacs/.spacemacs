@@ -123,37 +123,6 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need to
-   ;; compile Emacs 27 from source following the instructions in file
-   ;; EXPERIMENTAL.org at to root of the git repository.
-   ;;
-   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
-   ;; regardless of the following setting when native compilation is in effect.
-   ;;
-   ;; (default nil)
-   dotspacemacs-enable-emacs-pdumper nil
-
-   ;; Name of executable file pointing to emacs 27+. This executable must be
-   ;; in your PATH.
-   ;; (default "emacs")
-   dotspacemacs-emacs-pdumper-executable-file "emacs"
-
-   ;; Name of the Spacemacs dump file. This is the file will be created by the
-   ;; portable dumper in the cache directory under dumps sub-directory.
-   ;; To load it when starting Emacs add the parameter `--dump-file'
-   ;; when invoking Emacs 27.1 executable on the command line, for instance:
-   ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
-   ;; (default (format "spacemacs-%s.pdmp" emacs-version))
-   dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
-
-   ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
-   ;; possible. Set it to nil if you have no way to use HTTPS in your
-   ;; environment, otherwise it is strongly recommended to let it set to t.
-   ;; This variable has no effect if Emacs is launched with the parameter
-   ;; `--insecure' which forces the value of this variable to nil.
-   ;; (default t)
-   dotspacemacs-elpa-https t
-
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
    dotspacemacs-elpa-timeout 5
@@ -244,7 +213,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
 
    ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
-   ;; This has no effect in terminal or if "all-the-icons" package or the font
+   ;; This has no effect in terminal or if "nerd-icons" package or the font
    ;; is not installed. (default nil)
    dotspacemacs-startup-buffer-show-icons nil
 
@@ -300,6 +269,9 @@ It should only modify the values of Spacemacs settings."
                                :weight normal
                                :width normal)
 
+   ;; Default icons font, it can be `all-the-icons' or `nerd-icons'.
+   dotspacemacs-default-icons-font 'all-the-icons
+
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
 
@@ -319,10 +291,10 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-major-mode-leader-key ","
 
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
-   ;; (default "C-M-m" for terminal mode, "<M-return>" for GUI mode).
+   ;; (default "C-M-m" for terminal mode, "M-<return>" for GUI mode).
    ;; Thus M-RET should work as leader key in both GUI and terminal modes.
    ;; C-M-m also should work in terminal mode, but not in GUI mode.
-   dotspacemacs-major-mode-emacs-leader-key (if window-system "<M-return>" "C-M-m")
+   dotspacemacs-major-mode-emacs-leader-key (if window-system "M-<return>" "C-M-m")
 
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs `C-i', `TAB' and `C-m', `RET'.
@@ -386,6 +358,14 @@ It should only modify the values of Spacemacs settings."
    ;; displays the buffer in a same-purpose window even if the buffer can be
    ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil
+
+   ;; Make consecutive tab key presses after commands such as
+   ;; `spacemacs/alternate-buffer' (SPC TAB) cycle through previous
+   ;; buffers/windows/etc. Please see the option's docstring for more information.
+   ;; Set the option to t in order to enable cycling for all current and
+   ;; future cycling commands. Alternatively, choose a subset of the currently
+   ;; supported commands: '(alternate-buffer alternate-window). (default nil)
+   dotspacemacs-enable-cycling nil
 
    ;; Whether side windows (such as those created by treemacs or neotree)
    ;; are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m).
@@ -520,16 +500,15 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-persistent-server nil
 
    ;; List of search tool executable names. Spacemacs uses the first installed
-   ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
-   ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   ;; tool of the list. Supported tools are `rg', `ag', `ack' and `grep'.
+   ;; (default '("rg" "ag" "ack" "grep"))
+   dotspacemacs-search-tools '("rg" "ag" "ack" "grep")
 
    ;; The backend used for undo/redo functionality. Possible values are
-   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; `undo-redo', `undo-fu' and `undo-tree' see also `evil-undo-system'.
    ;; Note that saved undo history does not get transferred when changing
-   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
-   ;; is not maintained anymore and `undo-redo' is very basic."
-   dotspacemacs-undo-system 'undo-fu
+   ;; your undo system from or to undo-tree. (default `undo-redo')
+   dotspacemacs-undo-system 'undo-redo
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -612,7 +591,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -634,7 +613,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;;                                     doom-one
   ;;                                     doom-zenburn))
 
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -642,7 +621,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -678,7 +657,9 @@ before packages are loaded."
   ;; org journal
   (setq org-journal-dir "~/git/timetracker/")
   (setq org-journal-date-prefix "#+TITLE: ")
-  (setq org-journal-date-format "%A, %B %d %Y")
+  (setq org-journal-date-format "%d-%m-%Y")
+  (setq org-journal-time-format "")
+
 
   (defun copy-to-clipboard ()
 
@@ -726,6 +707,7 @@ before packages are loaded."
   ;;(setq lsp-session-folders-blacklist (list (expand-file-name "~")))
   (setq lsp-project-blacklist (list (expand-file-name "~")))
 
+
   ;;   (with-eval-after-load "helm"
   ;;     (defun helm-persistent-action-display-window (&optional split-onewindow)
   ;;       "Return the window that will be used for persistent action.
@@ -737,6 +719,37 @@ before packages are loaded."
   ;;  '(add-to-list 'org-structure-template-alist
   ;;                ;;'("s" "#+NAME: ?\n#+BEGIN_SRC \n\n#+END_SRC")))
   ;;                ("s" "src")))
+
+  (setq org-clock-continuously t)
+
+  (defun customfunc-insert-past-clock ()
+    "Insert past clock to the current header."
+    (interactive)
+    (let ((active-clock-marker (copy-marker org-clock-marker)))
+      (unwind-protect
+          (let* ((start (org-read-date t t (customfunc--org-get-timestamp-fallback)))
+                 (e (org-entry-get nil "EFFORT" nil nil))
+                 (rest-minutes (when e
+                                 (- (org-duration-to-minutes e)
+                                    (org-duration-to-minutes (or (org-clock-sum-current-item) 0.0)))))
+                 (duration (or (read-string "Duration: " (if (and rest-minutes (> rest-minutes 0))
+                                                             (org-duration-from-minutes rest-minutes)
+                                                           e))))
+                 (minutes (* 60 (org-duration-to-minutes duration))))
+            (when (marker-buffer active-clock-marker) (org-clock-out))
+            (org-clock-in nil start)
+            (org-clock-out nil nil (time-add start (seconds-to-time minutes)))))
+      (when (marker-buffer active-clock-marker)
+        (switch-to-buffer (marker-buffer active-clock-marker)
+                          (goto-char active-clock-marker)
+                          (org-clock-in)))))
+
+  (defun customfunc--org-get-timestamp-fallback ()
+    "Get timestamp with using multiple fallbacks."
+    (or (org-entry-get nil "DEADLINE" nil nil)
+        (org-entry-get nil "SCHEDULE" nil nil)
+        (org-entry-get nil "TIMESTAMP" nil nil)))
+
   )
 
 (defun bjm/align-whitespace (start end)
@@ -760,7 +773,8 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
- '(org-agenda-files '("/home/jkovalux/git/timetracker/20240301"))
+ '(org-agenda-files
+   '("~/git/timetracker/20250825" "/home/jkovalux/git/timetracker/20250805"))
  '(package-selected-packages
    '(systemd journalctl-mode company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode tern yasnippet which-key undo-tree org-plus-contrib mmm-mode json-mode js2-mode hydra expand-region evil-unimpaired f s dash diff-hl csv-mode company-statistics company coffee-mode async aggressive-indent adaptive-wrap ace-window avy))
  '(paradox-github-token t)
