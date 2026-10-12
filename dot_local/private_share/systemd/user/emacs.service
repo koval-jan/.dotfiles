@@ -1,0 +1,14 @@
+[Unit]
+Description=Spacemacs
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/emacs --daemon
+ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+Restart=on-failure
+Environment="DISPLAY=:0"
+Environment=SSH_AUTH_SOCK=%t/keyring/ssh
+
+[Install]
+WantedBy=default.target
+

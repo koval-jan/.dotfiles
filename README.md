@@ -1,105 +1,25 @@
-# .dotfiles
-.dotfiles for stow
+# .dotfiles (chezmoi - personal instance)
 
-Manage .dotfiles with stow
+Personal dotfiles (public). Work-specific configuration lives in a separate
+private chezmoi instance on the internal GitLab - never in this repo.
 
-```sh
-git clone https://github.com/koval-jan/.dotfiles.git
-cd .dotfiles
-git submodule update --init
+## Setup (any machine)
 
-stow -t ~/ vim
-stow -t ~/ spacemacs
-stow -t ~/ git
-stow -t ~/ screen
-stow -t ~/ tmux
-stow -t ~/ ssh
-stow -t ~/ bash
-stow -t ~/ starship
-```
+    chezmoi init --apply koval-jan/.dotfiles
+    # answer the prompt: profile = personal | server
 
-## git
+## Daily
 
-To include extra git configuration globally run:
+    chezmoi edit <file>    # edit source state
+    chezmoi diff           # review pending changes
+    chezmoi apply          # deploy
+    chezmoi update         # git pull + apply
+    chezmoi add <file>     # start managing a file
+    chezmoi unmanaged      # what is not managed yet
 
-enabling:
+## Conventions
 
-```sh
-git config --global --add include.path "$HOME/.gitconfig.extra"
-```
-
-disabling:
-
-```sh
-git config --global --unset-all include.path ".*\.gitconfig.extra"
-```
-
-### git with p4v
-
-to use p4v as diff and merge tool
-
-enabling:
-
-```sh
-git config --global --add include.path "$HOME/.gitconfig.p4v"
-```
-
-disabling:
-
-```sh
-git config --global --unset-all include.path ".*\.gitconfig.p4v"
-```
-
-### git with meld
-
-to use meld as diff and merge tool
-
-enabling:
-```sh
-git config --global --add include.path "$HOME/.gitconfig.meld"
-```
-
-disabling:
-
-```sh
-git config --global --unset-all include.path ".*\.gitconfig.meld"
-```
-
-### git diff with difftastic
-
-to use difftastic as diff tool
-
-enabling:
-```sh
-git config --global --add include.path "$HOME/.gitconfig.difftastic"
-```
-
-disabling:
-
-```sh
-git config --global --unset-all include.path ".*\.gitconfig.difftastic"
-```
-
-
-## bash
-
-bashrc extension scripts in ~/.bashrc.d/
-
-enabling:
-
-```sh
-# add to ~/.bashrc
-
-# extension from dotfiles loads ~/.bashrc.d/*.bashrc files
-source ~/.bashrc.extra
-```
-
-
-disabling:
-
-```sh
-# remove from ~/.bashrc
-
-# extension from dotfiles loads ~/.bashrc.d/*.bashrc files
-source ~/.bashrc.extra
-```
+- Profiles: `personal` | `server` (prompted once at init, stored locally).
+- Git identity: base = GitHub identity; repos under `~/git/` use
+  `~/.gitconfig.work` (deployed by the work instance); repos under
+  `~/git.github/` use the base (GitHub) identity via directory layout.

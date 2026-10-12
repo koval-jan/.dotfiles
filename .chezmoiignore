@@ -1,0 +1,10 @@
+README.md
+
+{{ if eq .profile "server" }}
+# GUI/terminál vzhľad na serveri netreba
+.warp/
+.lsp/
+.bashrc.d/08_powerline.bashrc
+.bashrc.d/18_starship.bashrc
+.bashrc.d/25_ghostty.bashrc
+{{ end }}
