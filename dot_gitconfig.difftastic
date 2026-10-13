@@ -1,9 +1,9 @@
 #
-#  difftastic as diff tool
+#  difftastic as diff tool (difftool mode)
+#  - `git diff` = standardny unified format (parsovatelny pre agentov/TUI)
+#  - `git dft`  = difftastic (bohaty view)
+#  - `git dlog` = difftastic log -p
 #
-
-[diff]
-  external = difft
 
 [difftool]
 	prompt = false
